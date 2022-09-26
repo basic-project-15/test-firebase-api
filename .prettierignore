@@ -1,0 +1,11 @@
+dist
+public
+build
+
+package-lock.json
+package.json
+README.md
+.firebaserc
+firebase.json
+firestore.indexes.json
+firestore.rules
