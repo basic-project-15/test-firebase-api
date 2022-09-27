@@ -78,7 +78,7 @@ const postTask = async (req, res) => {
     });
   }
 
-  nuevaTask = await db.collection('tasks').add({
+  let newTask = await db.collection('tasks').add({
     title,
     description,
   });
@@ -86,7 +86,7 @@ const postTask = async (req, res) => {
   return res.status(200).send({
     success: true,
     message: 'Tarea creada.',
-    data: { idTask: nuevaTask.id },
+    data: { idTask: newTask.id },
   });
 };
 
@@ -124,7 +124,7 @@ const patchTask = async (req, res) => {
     });
   }
 
-  nuevaTask = await db.collection('tasks').doc(idTask).update({
+  await db.collection('tasks').doc(idTask).update({
     title,
     description,
   });
