@@ -14,6 +14,7 @@ const {
   patchUser,
   deleteUser,
 } = require('./controllers/users');
+const { postLogin } = require('./controllers/auth');
 
 // Tasks
 exports.getTasks = functions.https.onRequest(async (req, res) => {
@@ -55,4 +56,9 @@ exports.patchUser = functions.https.onRequest(async (req, res) => {
 
 exports.deleteUser = functions.https.onRequest(async (req, res) => {
   deleteUser(req, res);
+});
+
+// Auth
+exports.postLogin = functions.https.onRequest(async (req, res) => {
+  postLogin(req, res);
 });
