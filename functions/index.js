@@ -7,7 +7,13 @@ const {
   patchTask,
   deleteTask,
 } = require('./controllers/tasks');
-const { getUsers, getUser, postUser } = require('./controllers/users');
+const {
+  getUsers,
+  getUser,
+  postUser,
+  patchUser,
+  deleteUser,
+} = require('./controllers/users');
 
 // Tasks
 exports.getTasks = functions.https.onRequest(async (req, res) => {
@@ -41,4 +47,12 @@ exports.getUser = functions.https.onRequest(async (req, res) => {
 
 exports.postUser = functions.https.onRequest(async (req, res) => {
   postUser(req, res);
+});
+
+exports.patchUser = functions.https.onRequest(async (req, res) => {
+  patchUser(req, res);
+});
+
+exports.deleteUser = functions.https.onRequest(async (req, res) => {
+  deleteUser(req, res);
 });

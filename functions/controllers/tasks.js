@@ -99,7 +99,7 @@ const patchTask = async (req, res) => {
     if (!doc.exists) {
       return res.status(400).send({
         success: false,
-        message: 'Task no encontrada.',
+        message: 'Tarea no encontrada.',
         data: null,
       });
     }
