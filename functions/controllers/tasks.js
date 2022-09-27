@@ -24,7 +24,7 @@ const getTasks = async (req, res) => {
 };
 
 const getTask = async (req, res) => {
-  const { idTask } = req.body;
+  const { idTask } = req.query;
   let responseTask;
   try {
     let doc = await db.collection('tasks').doc(idTask).get();
@@ -137,7 +137,7 @@ const patchTask = async (req, res) => {
 };
 
 const deleteTask = async (req, res) => {
-  const { idTask } = req.body;
+  const { idTask } = req.query;
   try {
     let doc = await db.collection('tasks').doc(idTask).get();
     if (!doc.exists) {
