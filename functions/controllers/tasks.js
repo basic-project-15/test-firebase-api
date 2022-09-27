@@ -1,10 +1,10 @@
 const { db } = require('../configs/firebase');
 
-const getTareas = async (req, res) => {
-  let responseTareas;
+const getTasks = async (req, res) => {
+  let responseTasks;
   try {
-    docs = (await db.collection('tareas').get()).docs;
-    responseTareas = docs.map(doc => ({
+    docs = (await db.collection('tasks').get()).docs;
+    responseTasks = docs.map(doc => ({
       id: doc.id,
       ...doc.data(),
     }));
@@ -19,17 +19,17 @@ const getTareas = async (req, res) => {
   return res.status(200).send({
     success: true,
     message: 'Tareas listadas',
-    data: { tareas: responseTareas },
+    data: { tasks: responseTasks },
   });
 };
 
-const getTarea = async (req, res) => {
-  const { idTarea } = req.body;
-  let responseTarea;
+const getTask = async (req, res) => {
+  const { idTask } = req.body;
+  let responseTask;
   try {
-    let doc = await db.collection('tareas').doc(idTarea).get();
+    let doc = await db.collection('tasks').doc(idTask).get();
     if (doc.exists) {
-      responseTarea = doc.data();
+      responseTask = { id: idTask, ...doc.data() };
     } else {
       return res.status(400).send({
         success: false,
@@ -48,22 +48,22 @@ const getTarea = async (req, res) => {
   return res.status(200).send({
     success: true,
     message: 'Tarea listada',
-    data: { tarea: responseTarea },
+    data: { task: responseTask },
   });
 };
 
-const postTarea = async (req, res) => {
-  const { titulo, descripcion } = req.body;
+const postTask = async (req, res) => {
+  const { title, description } = req.body;
 
-  let responseTareas;
+  let responseTasks;
   try {
-    docs = (await db.collection('tareas').where('titulo', '==', titulo).get())
+    docs = (await db.collection('tasks').where('title', '==', title).get())
       .docs;
-    responseTareas = docs.map(doc => ({
+    responseTasks = docs.map(doc => ({
       id: doc.id,
       ...doc.data(),
     }));
-    if (responseTareas.length) {
+    if (responseTasks.length) {
       return res.status(400).send({
         success: false,
         message: 'Ya existe una tarea con este titulo.',
@@ -78,39 +78,38 @@ const postTarea = async (req, res) => {
     });
   }
 
-  nuevaTarea = await db.collection('tareas').add({
-    titulo,
-    descripcion,
+  nuevaTask = await db.collection('tasks').add({
+    title,
+    description,
   });
 
   return res.status(200).send({
     success: true,
     message: 'Tarea creada.',
-    data: { idTarea: nuevaTarea.id },
+    data: { idTask: nuevaTask.id },
   });
 };
 
-const patchTarea = async (req, res) => {
-  const { idTarea, titulo, descripcion } = req.body;
+const patchTask = async (req, res) => {
+  const { idTask, title, description } = req.body;
 
-  let responseTareas;
+  let responseTasks;
   try {
-    let doc = await db.collection('tareas').doc(idTarea).get();
+    let doc = await db.collection('tasks').doc(idTask).get();
     if (!doc.exists) {
       return res.status(400).send({
         success: false,
-        message: 'Tarea no encontrada.',
+        message: 'Task no encontrada.',
         data: null,
       });
     }
-    let docs = (
-      await db.collection('tareas').where('titulo', '==', titulo).get()
-    ).docs;
-    responseTareas = docs.map(doc => ({
+    let docs = (await db.collection('tasks').where('title', '==', title).get())
+      .docs;
+    responseTasks = docs.map(doc => ({
       id: doc.id,
       ...doc.data(),
     }));
-    if (responseTareas.length && responseTareas[0]?.id !== idTarea) {
+    if (responseTasks.length && responseTasks[0]?.id !== idTask) {
       return res.status(400).send({
         success: false,
         message: 'Ya existe una tarea con este titulo.',
@@ -125,22 +124,22 @@ const patchTarea = async (req, res) => {
     });
   }
 
-  nuevaTarea = await db.collection('tareas').doc(idTarea).update({
-    titulo,
-    descripcion,
+  nuevaTask = await db.collection('tasks').doc(idTask).update({
+    title,
+    description,
   });
 
   return res.status(200).send({
     success: true,
     message: 'Tarea actualizada.',
-    data: { idTarea },
+    data: { idTask },
   });
 };
 
-const deleteTarea = async (req, res) => {
-  const { idTarea } = req.body;
+const deleteTask = async (req, res) => {
+  const { idTask } = req.body;
   try {
-    let doc = await db.collection('tareas').doc(idTarea).get();
+    let doc = await db.collection('tasks').doc(idTask).get();
     if (!doc.exists) {
       return res.status(400).send({
         success: false,
@@ -156,17 +155,17 @@ const deleteTarea = async (req, res) => {
     });
   }
 
-  await db.collection('tareas').doc(idTarea).delete();
+  await db.collection('tasks').doc(idTask).delete();
 
   return res.status(200).send({
     success: true,
     message: 'Tarea eliminada',
-    data: { idTarea },
+    data: { idTask },
   });
 };
 
-exports.getTareas = getTareas;
-exports.getTarea = getTarea;
-exports.postTarea = postTarea;
-exports.patchTarea = patchTarea;
-exports.deleteTarea = deleteTarea;
+exports.getTasks = getTasks;
+exports.getTask = getTask;
+exports.postTask = postTask;
+exports.patchTask = patchTask;
+exports.deleteTask = deleteTask;

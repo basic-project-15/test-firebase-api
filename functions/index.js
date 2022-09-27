@@ -1,29 +1,29 @@
 const functions = require('firebase-functions');
 
 const {
-  getTareas,
-  getTarea,
-  postTarea,
-  patchTarea,
-  deleteTarea,
-} = require('./controllers/tareas');
+  getTasks,
+  getTask,
+  postTask,
+  patchTask,
+  deleteTask,
+} = require('./controllers/tasks');
 
-exports.getTareas = functions.https.onRequest(async (req, res) => {
-  getTareas(req, res);
+exports.getTasks = functions.https.onRequest(async (req, res) => {
+  getTasks(req, res);
 });
 
-exports.getTarea = functions.https.onRequest(async (req, res) => {
-  getTarea(req, res);
+exports.getTask = functions.https.onRequest(async (req, res) => {
+  getTask(req, res);
 });
 
-exports.postTarea = functions.https.onRequest(async (req, res) => {
-  postTarea(req, res);
+exports.postTask = functions.https.onRequest(async (req, res) => {
+  postTask(req, res);
 });
 
-exports.patchTarea = functions.https.onRequest(async (req, res) => {
-  patchTarea(req, res);
+exports.patchTask = functions.https.onRequest(async (req, res) => {
+  patchTask(req, res);
 });
 
-exports.deleteTarea = functions.https.onRequest(async (req, res) => {
-  deleteTarea(req, res);
+exports.deleteTask = functions.https.onRequest(async (req, res) => {
+  deleteTask(req, res);
 });
