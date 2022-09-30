@@ -95,6 +95,7 @@ const patchUser = async (req, res) => {
   const { idUser, name, email, password } = req.body;
 
   let responseUsers;
+  let responseUser = {};
   try {
     let doc = await db.collection('users').doc(idUser).get();
     if (!doc.exists) {
@@ -104,6 +105,7 @@ const patchUser = async (req, res) => {
         data: null,
       });
     }
+    responseUser = { id: idUser, ...doc.data() };
     let docs = (await db.collection('users').where('email', '==', email).get())
       .docs;
     responseUsers = docs.map(doc => ({
@@ -122,6 +124,13 @@ const patchUser = async (req, res) => {
       success: false,
       message: 'Hubo un error inesperado.',
       data: error,
+    });
+  }
+  if (responseUser.email === 'admin@gmail.com') {
+    return res.status(400).send({
+      success: false,
+      message: 'Usuario protegido, no se puede editar.',
+      data: null,
     });
   }
   let newUser = {};
@@ -148,6 +157,7 @@ const patchUser = async (req, res) => {
 
 const deleteUser = async (req, res) => {
   const { idUser } = req.query;
+  let responseUser = {};
   try {
     let doc = await db.collection('users').doc(idUser).get();
     if (!doc.exists) {
@@ -157,11 +167,19 @@ const deleteUser = async (req, res) => {
         data: null,
       });
     }
+    responseUser = { id: idUser, ...doc.data() };
   } catch (error) {
     return res.status(500).send({
       success: false,
       message: 'Hubo un error inesperado.',
       data: error,
+    });
+  }
+  if (responseUser.email === 'admin@gmail.com') {
+    return res.status(400).send({
+      success: false,
+      message: 'Usuario protegido, no se puede eliminar.',
+      data: null,
     });
   }
 
