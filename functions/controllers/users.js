@@ -124,12 +124,20 @@ const patchUser = async (req, res) => {
       data: error,
     });
   }
-
-  await db.collection('users').doc(idUser).update({
-    name,
-    email,
-    password,
-  });
+  let newUser = {};
+  if (password) {
+    newUser = {
+      name,
+      email,
+      password,
+    };
+  } else {
+    newUser = {
+      name,
+      email,
+    };
+  }
+  await db.collection('users').doc(idUser).update(newUser);
 
   return res.status(200).send({
     success: true,
